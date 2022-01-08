@@ -33,7 +33,7 @@ public class HelloController {
     @RequestMapping("/api/banzai")
     public String ban(@RequestParam("img") MultipartFile file) throws IOException {
         System.out.println("hello");
-        saveFiole(file, "/SpringBoot/demo/demo/src/main/resources/static");
+        saveFiole(file, "/Users/antk7/Desktop/SimpleBox/src/main/resources/static");
         return this.s;
     }
 
