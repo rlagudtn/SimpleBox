@@ -1,25 +1,75 @@
-import logo from './logo.svg';
+/* eslint-disable */
+
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import axios from 'axios';
+import ban from './banzai.PNG';
+import imageCompression from "browser-image-compression";
 
 function App() {
+
+  let [items, setitems] = useState('hello');
+
+  const formData = new FormData();
+
+  const onChange = (e) => {
+    const img = e.target.files[0];
+    formData.append('img', img);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>HELLO WORLD!</h1>
+
+      <button onClick={()=>{
+        axios.get('/api/hello')
+        .then((result)=>{
+          setitems(result.data);
+        })
+        .catch(()=>{console.log('fail');})
+      }}>get</button>
+
+      <button onClick={()=>{
+        axios.post('/api/hello', {
+            data: "post complete!"
+        })
+        .then((result)=>{
+            setitems(result.data);
+        })
+      }}>post</button>
+      <br />
+      {items}
+
+      <br/>
+      <br/>
+
+      <div>
+      <button onClick={()=>{
+        axios.post("/api/banzai", formData, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+          },
+        })
+        .then((result) => {
+          alert('성공');
+        }).catch(err => {
+          alert('실패');
+        })
+        formData.delete('img');
+      }}>bomb</button>
+      </div>
+
+      <div>
+        <input type='file' 
+            accept='image/jpg,image/png,image/jpeg,image/gif' 
+            name='profile_img' 
+            onChange={onChange}>
+        </input>
+      </div>
+
     </div>
   );
 }
+
 
 export default App;
