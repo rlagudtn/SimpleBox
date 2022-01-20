@@ -30,14 +30,17 @@ public class HelloController {
         return this.s;
     }
 
-    @RequestMapping("/api/banzai")
-    public String ban(@RequestParam("img") MultipartFile file) throws IOException {
-        System.out.println("hello");
-        saveFiole(file, "/Users/antk7/Desktop/SimpleBox/src/main/resources/static");
+    @PostMapping("/api/banzai")
+    public String ban(@RequestParam("img") MultipartFile file,
+                      @RequestParam("name") String name,@RequestParam("count")String count) throws IOException {
+        System.out.println(file.toString());
+        System.out.println(name);
+        System.out.println(count);
+        saveFile(file, "/Users/SOO/Desktop/SimpleBox/SimpleBox/src/main/resources/static");
         return this.s;
     }
 
-    private void saveFiole(MultipartFile file, String directoryPath) throws IOException {
+    private void saveFile(MultipartFile file, String directoryPath) throws IOException {
         // parent directory를 찾는다.
         Path directory = Paths.get(directoryPath).toAbsolutePath().normalize();
 

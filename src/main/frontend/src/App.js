@@ -7,12 +7,20 @@ import axios from 'axios';
 function App() {
 
   let [items, setitems] = useState('hello');
-
+  let [name,setName]=useState("");
   const formData = new FormData();
+
 
   const onChange = (e) => {
     const img = e.target.files[0];
-    formData.append('img', img);
+    const body=JSON.stringify({
+        name:name,
+    });
+    let count=10;
+      formData.append('img', img);
+      formData.append('name',name);
+      formData.append('count',count.toString());
+
   }
 
   return (
@@ -43,6 +51,7 @@ function App() {
 
       <div>
       <button onClick={()=>{
+
         axios.post("/api/banzai", formData, {
           headers: {
             "Content-Type": `multipart/form-data`,
@@ -58,11 +67,18 @@ function App() {
       </div>
 
       <div>
-        <input type='file' 
-            accept='image/jpg,image/png,image/jpeg,image/gif' 
-            name='profile_img' 
-            onChange={onChange}>
-        </input>
+          <form >
+              <input type="text" onChange={(e)=>{
+                setName(e.target.value)
+                console.log(name);
+                }}/>
+              <input type='file'
+                     accept='image/jpg,image/png,image/jpeg,image/gif'
+                     name='profile_img'
+                     onChange={onChange}>
+              </input>
+          </form>
+
       </div>
 
     </div>
