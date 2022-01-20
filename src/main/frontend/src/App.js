@@ -13,6 +13,11 @@ function App() {
   const onChange = (e) => {
     const img = e.target.files[0];
     formData.append('img', img);
+    formData.append('times', 5);
+    formData.append('title', 'mybox');
+    for(var pair of formData.entries()){
+      console.log(pair[0] + ', ' + pair[1]);
+    }
   }
 
   return (
