@@ -12,6 +12,7 @@ import java.util.List;
 public class PandoraService {
     private final PandoraRepository pandoraRepository;
 
+    @Transactional
     public Long makePandora(String name,int count,String fileLocation){
         String newKey=generateKey();
 

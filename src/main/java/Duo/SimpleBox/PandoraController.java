@@ -24,20 +24,28 @@ public class PandoraController {
                               @RequestParam("name")String name,
                               @RequestParam("count")String count,
                               Model model) throws IOException {
-        System.out.println("hello");
-
+        System.out.println(file);
+        System.out.println(name);
+        String ret="";
         ///임시 작업 중
 
         int iCount=Integer.parseInt(count);
 
         //file 저장.
-        saveFile(file,directoryPath);
 
-        //db에는 fileLocation 저장
-        Long savedPandoraId = pandoraService.makePandora(name, iCount, directoryPath);
-        Pandora newPandora = pandoraService.findOne(savedPandoraId);
+        try{
+            saveFile(file,directoryPath);
 
-        return newPandora.getKey();
+            //db에는 fileLocation 저장
+            Long savedPandoraId = pandoraService.makePandora(name, iCount, directoryPath);
+            Pandora newPandora = pandoraService.findOne(savedPandoraId);
+            ret=newPandora.getKey();
+        }
+        catch (IOException e){
+            System.err.println("IOException 발생했습니다");
+        }
+
+        return ret;
     }
 
 
@@ -57,7 +65,7 @@ public class PandoraController {
         Path targetPath=directory.resolve(fileName).normalize();
 
         //파일이 이미 존재하는지 확인
-        Assert.state(!Files.exists(targetPath), fileName + " File already exists.");
+//        Assert.state(!Files.exists(targetPath), fileName + " File already exists.");
         file.transferTo(targetPath);
     }
 
