@@ -1,16 +1,24 @@
 package Duo.SimpleBox;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ui.Model;
 import org.springframework.util.Assert;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -19,6 +27,7 @@ import java.nio.file.Paths;
 public class PandoraController {
     private final PandoraService pandoraService;
     private String directoryPath="/Users/SOO/Desktop/SimpleBox/SimpleBox/src/main/resources/static";
+
     @PostMapping("/pandora")
     public String savePandora(@RequestParam("files") MultipartFile file,
                               @RequestParam("name")String name,
@@ -37,7 +46,7 @@ public class PandoraController {
             saveFile(file,directoryPath);
 
             //db에는 fileLocation 저장
-            Long savedPandoraId = pandoraService.makePandora(name, iCount, directoryPath);
+            Long savedPandoraId = pandoraService.makePandora(name, iCount, directoryPath,file.getOriginalFilename());
             Pandora newPandora = pandoraService.findOne(savedPandoraId);
             ret=newPandora.getKey();
         }
@@ -48,7 +57,50 @@ public class PandoraController {
         return ret;
     }
 
+    @GetMapping("/pandora")
+    public String searchPandoraByKeyword(@RequestParam("keyword") String keyword)
+    throws JsonProcessingException{
 
+        List<Pandora> searchedPandora= pandoraService.findPandoraByWord(keyword);
+
+        Map<Long, String> map = new HashMap<>();
+        for(Pandora pandora:searchedPandora){
+            map.put(pandora.getId(),pandora.getName());
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        String ret=mapper.writeValueAsString(map);
+        System.out.println(ret);
+    //react에서
+    //let list = JSON.parse ( result~~ );
+        return ret;
+    }
+
+    @PostMapping("/pandora/download")
+    @ResponseBody
+    public byte[] downloadPandora(HttpServletResponse response,
+                                   @RequestParam("pandoraId")String pandoraId,
+                                   @RequestParam("hashCode")String hashCode) throws IOException{
+        Long downloadId = Long.parseLong(pandoraId);
+        Pandora downloadedPandora = pandoraService.findOne(downloadId);
+        byte[] bytes=null;
+        if(downloadedPandora.getKey()==hashCode){
+            String fileName=downloadedPandora.getFileName();
+            String filePath=downloadedPandora.getFileLocation();
+
+            File file=new File(filePath,fileName);
+            bytes= FileCopyUtils.copyToByteArray(file);
+
+            String fn = new String(file.getName().getBytes(), "utf-8");
+            response.setHeader("Content-Disposition","attachment;filename=\""+fn+
+                    "\"");
+            response.setContentLength(bytes.length);
+        }
+        /*else{
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }*/
+        return bytes;
+    }
 
     private void saveFile(MultipartFile file,String directoryPath) throws IOException{
         Path directory = Paths.get(directoryPath).toAbsolutePath().normalize();
