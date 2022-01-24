@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,14 +63,16 @@ public class PandoraController {
     throws JsonProcessingException{
 
         List<Pandora> searchedPandora= pandoraService.findPandoraByWord(keyword);
-
-        Map<Long, String> map = new HashMap<>();
+        List<Map<String,String>> pandoraList=new ArrayList<Map<String,String>>();
         for(Pandora pandora:searchedPandora){
-            map.put(pandora.getId(),pandora.getName());
+            Map<String, String> map = new HashMap<>();
+            map.put("id",pandora.getId().toString());
+            map.put("name",pandora.getName());
+            pandoraList.add(map);
         }
 
         ObjectMapper mapper = new ObjectMapper();
-        String ret=mapper.writeValueAsString(map);
+        String ret=mapper.writeValueAsString(pandoraList);
         System.out.println(ret);
     //react에서
     //let list = JSON.parse ( result~~ );

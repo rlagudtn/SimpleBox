@@ -1,18 +1,19 @@
 /* eslint-disable */
 
 //libs
-import { Container, Row, Col, Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, Route, Switch, useHistory} from 'react-router-dom'
 import axios from 'axios';
 
 //files
 import './App.css';
-import search from './search.png';
 import boxicon from './boxicon.png'
 import PopupKeyask from './components/PopupKeyask';
-
+import NavbarMain from './LayoutComponent/NavbarMain';
+import LeftSidebar from './LayoutComponent/LeftSidebar';
+import NavbarSub from './LayoutComponent/NavbarSub';
 function App() {
 
   // API로 받은 박스 제목들
@@ -20,13 +21,13 @@ function App() {
 
   // 실제 보여지는 박스 제목들
   let [shows, setshows] = useState(titles.slice());
-
+  let [boxes,setBoxes]=useState([]);
   // 박스키 입력 팝업 state
   let [keyask, setkeyask] = useState(false);
 
   // 클릭한 박스 제목 
   let [selected, setselected] = useState('');
-
+  
   const openKeyask = () => {
     setkeyask(true);
   }
@@ -41,9 +42,9 @@ function App() {
   const fd = new FormData();
   // 새 박스 만들 때 사용되는 Onclick함수
   const createBox = () => {
-    fd.append('name', document.getElementById('boxtitle').value);
-    fd.append('count', document.getElementById('quantity').value);
-    fd.append('files', document.getElementById('boxfile').files[0]);
+    fd.append('name', document.querySelector('#boxtitle').value);
+    fd.append('count', document.querySelector('#quantity').value);
+    fd.append('files', document.querySelector('#boxfile').files[0]);
 
     // 서버에 보낼 데이터들 확인
     for(var pair of fd.entries()){
@@ -67,34 +68,14 @@ function App() {
     // 전송 후 폼데이터 비우기
     fd.delete('name');
     fd.delete('count');
-    fd.delete('files');    
+    fd.delete('files');  
   }
 
 
   return (
     <div className="App">
-
       {/* 네비게이션 바 */}
-      <Navbar bg="light" expand="lg">
-        <Container  className='navbar'>
-          <Navbar.Brand href="/">▣ simplebox</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/">Link</Nav.Link>
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="/">Action</NavDropdown.Item>
-                <NavDropdown.Item href="/">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="/">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="/">Separated link</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-
+      <NavbarMain/>
 
       {/* 전체 페이지 */}
       <Container className='main_container'>
@@ -102,15 +83,8 @@ function App() {
 
           {/* 사이드 바 */}
           <Col xs={3} className='sidebar'>
+            <LeftSidebar/>
             
-            <Nav defaultActiveKey="/home" className="flex-column">
-              <Nav.Link href="/">Active</Nav.Link>
-              <Nav.Link eventKey="/">Link</Nav.Link>
-              <Nav.Link eventKey="/">Link</Nav.Link>
-              <Nav.Link eventKey="disabled" disabled>
-                Disabled
-              </Nav.Link>
-            </Nav>
 
           </Col>
 
@@ -123,33 +97,20 @@ function App() {
 
             {/* 상단 옵션 바 */}
             <Container className='main_optionbar'>
-              <Row>
-                <Col>
-                  <input type="text" placeholder=' 박스 명 검색' onChange={(e) => {
-                    let temp = [];
-                    for(let i = 0; i<titles.length; i++){
-                      if(titles[i].includes(e.target.value)){
-                        temp.push(titles[i])
-                      }
-                    }
-                    setshows(temp);
-                  }}/>
-                  <img src={search} style={{'marginLeft' : '1%'}}/>
-                </Col>
-                <Col  xs={3}>
-                  <Link to='/new'><Button variant="primary" style={{'marginLeft' : '20%'}}>새 박스</Button></Link>
-                </Col>
-              </Row>
+              <NavbarSub titles={titles} setshows={setshows} setBoxes={setBoxes}/>
             </Container>
 
             {/* 박스들 배치 */}
             <Container className='main_boxes'>
               <Row>
                 {
-                  shows.map((a, b) => {
-                    return <BoxItem boxtitle = {a} count = {b} setkeyask = {setkeyask}
-                    setselected = {setselected}/>
+                  boxes.map((item,index)=>{
+                    return <BoxItem boxtitle={item["name"]} setkeyask = {setkeyask} setselected = {setselected}></BoxItem>
                   })
+                  // shows.map((a, b) => {
+                  //   return <BoxItem boxtitle = {a} count = {b} setkeyask = {setkeyask}
+                  //   setselected = {setselected}/>
+                  // })
                 }
 
                 {/* 박스를 클릭할 시 박스키 입력 팝업 */}
