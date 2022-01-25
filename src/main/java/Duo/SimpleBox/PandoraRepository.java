@@ -29,6 +29,13 @@ public class PandoraRepository {
 
     }
 
+    public List<Pandora> findByWord(String word){
+        String likeWord="%"+word+"%";
+        return em.createQuery("select p from Pandora p " +
+                "where p.name like :word",Pandora.class)
+                .setParameter("word", likeWord).getResultList();
+    }
+
     public Pandora findByKey(String key){
         return em.createQuery("select p from Pandora p where p.key=:key",Pandora.class)
                 .setParameter("key",key).getSingleResult();

@@ -12,11 +12,12 @@ import javax.persistence.Id;
 @Getter
 public class Pandora {
     Pandora(){}
-    Pandora(String name,String key,int count,String fileLocation){
+    Pandora(String name,String key,int count,String fileLocation,String fileName){
         this.name=name;
         this.key=key;
         this.count=count;
-        this.fileLocation=fileLocation;
+        this.fileLocation = fileLocation;
+        this.fileName=fileName;
     }
 
     @Id @GeneratedValue
@@ -31,4 +32,5 @@ public class Pandora {
 
     private String fileLocation;
 
+    private String fileName;
 }

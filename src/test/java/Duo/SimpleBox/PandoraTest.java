@@ -25,7 +25,7 @@ public class PandoraTest {
     public void savePandora()
     {
         //given
-        Pandora pandora=new Pandora("실습파일 동영상","1234",10,"/pandora/save");
+        Pandora pandora=new Pandora("실습파일 동영상","1234",10,"/pandora/save","");
         Long saveId = pandoraRepository.save(pandora);
 
         //when
@@ -42,8 +42,8 @@ public class PandoraTest {
     public void findPandoraAll()
     {
         //given
-        Pandora pandora=new Pandora("실습파일 동영상1","1234",10,"/pandora/save");
-        Pandora pandora1=new Pandora("실습파일 동영상1","1234543",10,"/pandora/save");
+        Pandora pandora=new Pandora("실습파일 동영상1","1234",10,"/pandora/save","");
+        Pandora pandora1=new Pandora("실습파일 동영상1","1234543",10,"/pandora/save","");
         pandoraRepository.save(pandora);
         pandoraRepository.save(pandora1);
         //when
