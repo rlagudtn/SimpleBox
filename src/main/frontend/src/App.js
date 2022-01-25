@@ -5,7 +5,6 @@ import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
 import React, {useEffect, useState} from 'react';
 import {Link, Route, Switch, useHistory} from 'react-router-dom'
-import axios from 'axios';
 
 //files
 import './App.css';

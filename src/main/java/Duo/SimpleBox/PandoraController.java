@@ -80,29 +80,35 @@ public class PandoraController {
     }
 
     @PostMapping("/pandora/download")
-    @ResponseBody
-    public byte[] downloadPandora(HttpServletResponse response,
-                                   @RequestParam("pandoraId")String pandoraId,
+    public String downloadPandora(@RequestParam("pandoraId")String pandoraId,
                                    @RequestParam("hashCode")String hashCode) throws IOException{
+        System.out.println(pandoraId);
+
         Long downloadId = Long.parseLong(pandoraId);
         Pandora downloadedPandora = pandoraService.findOne(downloadId);
-        byte[] bytes=null;
-        if(downloadedPandora.getKey()==hashCode){
-            String fileName=downloadedPandora.getFileName();
-            String filePath=downloadedPandora.getFileLocation();
-
-            File file=new File(filePath,fileName);
-            bytes= FileCopyUtils.copyToByteArray(file);
-
-            String fn = new String(file.getName().getBytes(), "utf-8");
-            response.setHeader("Content-Disposition","attachment;filename=\""+fn+
-                    "\"");
-            response.setContentLength(bytes.length);
+//        byte[] bytes=null;
+        String ret="error";
+        System.out.println(downloadedPandora.getKey()+"0");
+        System.out.println(hashCode+"0");
+        System.out.println(downloadedPandora.getKey().equals(hashCode));
+        if(downloadedPandora.getKey().equals(hashCode)){
+            ret=downloadedPandora.getFileLocation();
+//            String fileName=downloadedPandora.getFileName();
+//            String filePath=downloadedPandora.getFileLocation();
+//
+//            File file=new File(filePath,fileName);
+//            bytes= FileCopyUtils.copyToByteArray(file);
+//
+//            String fn = new String(file.getName().getBytes(), "utf-8");
+//            response.setHeader("Content-Disposition","attachment;filename=\""+fn+
+//                    "\"");
+//            response.setContentLength(bytes.length);
         }
         /*else{
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }*/
-        return bytes;
+//        return bytes;
+        return ret;
     }
 
     private void saveFile(MultipartFile file,String directoryPath) throws IOException{
