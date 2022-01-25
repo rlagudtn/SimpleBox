@@ -7,6 +7,7 @@ import NavbarSub from '../LayoutComponent/NavbarSub';
 import boxicon from '../boxicon.png'
 
 function PandoraMain(){
+  //검색해서 얻은 결과
   let [boxes,setBoxes]=useState([{"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"}]);
   // API로 받은 박스 제목들
   let [titles, settitles] = useState(['box_title1', 'box_title2', 'box_title3']);
@@ -33,10 +34,7 @@ function PandoraMain(){
             boxes.map((item, index) => {
               return <BoxItem item={item} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox}></BoxItem>
             })
-            // shows.map((a, b) => {
-            //   return <BoxItem boxtitle = {a} count = {b} setKeyModalToggle = {setKeyModalToggle}
-            //   setselected = {setselected}/>
-            // })
+            
           }
 
           {/* 박스를 클릭할 시 박스키 입력 팝업 */}

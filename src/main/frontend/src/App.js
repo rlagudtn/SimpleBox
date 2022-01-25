@@ -14,11 +14,6 @@ import PandoraMain from './EachBox/PandoraMain';
 import NewPandora from './EachBox/NewPandora';
 function App() {
 
- 
-
-  
-
-
   return (
     <div className="App">
       {/* 네비게이션 바 */}
