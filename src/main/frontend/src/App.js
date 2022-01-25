@@ -42,7 +42,7 @@ function App() {
   // 새 박스 만들 때 사용되는 Onclick함수
   const createBox = () => {
     fd.append('name', document.getElementById('boxtitle').value);
-    fd.append('count', document.getElementById('quantity').value);
+    fd.append('count', String(document.getElementById('quantity').value));
     fd.append('files', document.getElementById('boxfile').files[0]);
 
     // 서버에 보낼 데이터들 확인
@@ -57,7 +57,7 @@ function App() {
       },
     })
     .then((result) => {
-      alert('성공 : 박스가 저장되었습니다.');
+      alert('박스 저장 완료. 박스 비밀번호 : ' + result.data);
       // 홈으로 라우팅
       history.push('/');
     }).catch(err => {

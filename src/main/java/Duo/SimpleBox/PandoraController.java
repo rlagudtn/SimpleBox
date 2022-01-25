@@ -18,7 +18,8 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class PandoraController {
     private final PandoraService pandoraService;
-    private String directoryPath="/Users/SOO/Desktop/SimpleBox/SimpleBox/src/main/resources/static";
+    private final MemberRepository memberRepository;
+    private String directoryPath="/SpringBoot/Simplebox/src/main/resources/static";
     @PostMapping("/pandora")
     public String savePandora(@RequestParam("files") MultipartFile file,
                               @RequestParam("name")String name,
