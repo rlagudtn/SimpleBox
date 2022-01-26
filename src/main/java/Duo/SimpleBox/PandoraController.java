@@ -27,13 +27,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PandoraController {
     private final PandoraService pandoraService;
-<<<<<<< HEAD
-    private final MemberRepository memberRepository;
     private String directoryPath="/SpringBoot/Simplebox/src/main/resources/static";
-=======
-    private String directoryPath="/Users/SOO/Desktop/SimpleBox/SimpleBox/src/main/resources/static";
 
->>>>>>> 061c171083cf431d4fe7925e14a486eaa81c7c55
     @PostMapping("/pandora")
     public String savePandora(@RequestParam("files") MultipartFile file,
                               @RequestParam("name")String name,
@@ -67,7 +62,7 @@ public class PandoraController {
     public String searchPandoraByKeyword(@RequestParam("keyword") String keyword)
     throws JsonProcessingException{
 
-        List<Pandora> searchedPandora= pandoraService.findPandoraByWord(keyword);
+        List<Pandora> searchedPandora = pandoraService.findPandoraByWord(keyword);
         List<Map<String,String>> pandoraList=new ArrayList<Map<String,String>>();
         for(Pandora pandora:searchedPandora){
             Map<String, String> map = new HashMap<>();

@@ -13,11 +13,7 @@ public class PandoraService {
     private final PandoraRepository pandoraRepository;
 
     @Transactional
-<<<<<<< HEAD
-    public Long makePandora(String name,int count,String fileLocation){
-=======
     public Long makePandora(String name,int count,String fileLocation,String fileName){
->>>>>>> 061c171083cf431d4fe7925e14a486eaa81c7c55
         String newKey=generateKey();
 
         Pandora pandora=new Pandora(name,newKey,count,fileLocation,fileName);
