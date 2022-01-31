@@ -1,11 +1,15 @@
 import './HashCodeModal.css';
 import axios from 'axios';
 import { useState } from 'react';
+import {useHistory} from 'react-router-dom';
+import _ from 'lodash';
 
 function HashCodeModal(props){
   let currentBox=props.selectedBox;
   let [hashCode,setHashCode]=useState("");
-  
+  let setBoxes = props.setBoxes;
+  let boxes = props.boxes;
+
   //controller에 hashcode 값을 보내는 함수
   function sendHashCode(){
     let data= new FormData();
@@ -31,9 +35,30 @@ function HashCodeModal(props){
       document.body.appendChild(link);
       link.click();
       link.remove();
+      
+      data.delete('hashCode');
+      // 파일을 받아온 후 count가 0인지 검사
+      axios({
+        method:"post",
+        url : "/pandora/count",
+        data : data
+      }).then(response => {
+        // count가 0이면 boxes에서 제외
+        if(response.data == 0){
+          let temp = _.cloneDeep(boxes);
+          for(let i = 0; i < temp.length; i++){
+            if(temp[i].id == currentBox.id){
+              temp.splice(i, 1);
+              i--;
+            }
+          }
+          setBoxes(temp);
+        }
+      })
+
     })
     .catch(e => {
-      console.error(e)
+      console.error(e);
     })
   }
   return (
@@ -56,7 +81,13 @@ function HashCodeModal(props){
               console.log(hashCode);
             }}/></main>
           <footer>
-            <button onClick={sendHashCode}>
+            <button onClick={
+              ()=>{
+                sendHashCode();
+                props.setKeyModalToggle(false);
+                props.setSelectedBox(null);
+              }
+            }>
               {' '}
               확인{' '}
             </button>

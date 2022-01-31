@@ -11,10 +11,6 @@ spring:
     properties:
       hibernate:
   # show_sql: true
-<<<<<<< HEAD
       format_sql: true
-=======
-        format_sql: true
->>>>>>> 061c171083cf431d4fe7925e14a486eaa81c7c55
 logging.level:
   org.hibernate.SQL: debug

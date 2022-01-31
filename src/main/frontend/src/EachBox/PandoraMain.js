@@ -8,7 +8,7 @@ import boxicon from '../boxicon.png'
 
 function PandoraMain(){
   //검색해서 얻은 결과
-  let [boxes,setBoxes]=useState([{"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"}]);
+  let [boxes, setBoxes]=useState([{"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"}]);
   // API로 받은 박스 제목들
   let [titles, settitles] = useState(['box_title1', 'box_title2', 'box_title3']);
 
@@ -40,7 +40,7 @@ function PandoraMain(){
           {/* 박스를 클릭할 시 박스키 입력 팝업 */}
           
           {keyModalToggle!=false?
-          <HashCodeModal  selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle}/>:
+          <HashCodeModal  selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle} boxes={boxes} setBoxes={setBoxes}/>:
           null
           }
         </Row>
