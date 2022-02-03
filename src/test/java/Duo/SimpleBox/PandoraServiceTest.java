@@ -26,7 +26,7 @@ public class PandoraServiceTest {
     @Rollback(value = false)
     public void 판도라저장(){
         //given
-        Long pandoraId = pandoraService.makePandora("실전 스프링 부트", 10, "/file",
+        Long pandoraId = pandoraService.makePandora("실전 스프링 부트","1234", 10, "/file",
                 "arr.jpg");
 
         //when
@@ -41,9 +41,9 @@ public class PandoraServiceTest {
 
     public void 판도라이름으로찾기(){
         //given
-        pandoraService.makePandora("실전 스프링 부트", 10, "/file","arr.jpg");
-        pandoraService.makePandora("실전 스프링 부트1", 10, "/file","arr.jpg");
-        pandoraService.makePandora("스프링 부트", 10, "/file","arr.jpg");
+        pandoraService.makePandora("실전 스프링 부트","1234", 10, "/file","arr.jpg");
+        pandoraService.makePandora("실전 스프링 부트1","1234", 10, "/file","arr.jpg");
+        pandoraService.makePandora("스프링 부트","1234", 10, "/file","arr.jpg");
 
         
         //when

@@ -33,7 +33,7 @@ public class PandoraController {
     public String savePandora(@RequestParam("files") MultipartFile file,
                               @RequestParam("name")String name,
                               @RequestParam("count")String count,
-                              Model model) throws IOException {
+                              @RequestParam("code") String code) throws IOException {
         System.out.println(file);
         System.out.println(name);
         String ret="";
@@ -47,7 +47,7 @@ public class PandoraController {
             saveFile(file,directoryPath);
 
             //db에는 fileLocation 저장
-            Long savedPandoraId = pandoraService.makePandora(name, iCount, directoryPath,file.getOriginalFilename());
+            Long savedPandoraId = pandoraService.makePandora(name,code, iCount, directoryPath,file.getOriginalFilename());
             Pandora newPandora = pandoraService.findOne(savedPandoraId);
             ret=newPandora.getKey();
         }
@@ -102,9 +102,9 @@ public class PandoraController {
             response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
             response.setContentLength(bytes.length);
         }
-        /*else{
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
-        }*/
+        else{
+            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
+        }
         return bytes;
     }
 

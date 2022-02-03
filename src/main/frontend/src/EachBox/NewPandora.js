@@ -10,7 +10,7 @@ function NewPandora(){
     fd.append('name', document.querySelector('#boxtitle').value);
     fd.append('count', document.querySelector('#quantity').value);
     fd.append('files', document.querySelector('#boxfile').files[0]);
-
+    fd.append('code', document.querySelector('#code').value);
     // 서버에 보낼 데이터들 확인
     for(var pair of fd.entries()){
       console.log(pair[0] + ', ' + pair[1]);
@@ -50,7 +50,9 @@ function NewPandora(){
       <Container className='create_contents'>
         <Row>
           <Col>
-            <input type="text" id='boxtitle' placeholder=' 박스 제목 입력' />
+            <input type="text" id='boxtitle' placeholder=' 박스 제목 입력' /><br/>
+            <input type="text" id="code" style={{"marginTop":'2%'}} placeholder=" 암호를 입력"/>
+            
             <label htmlFor="quantity" style={{ 'marginLeft': '2%', 'marginRight': '1%' }}>
               공유 횟수 지정 (최대 20회):
             </label>
