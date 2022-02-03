@@ -1,11 +1,15 @@
 import './HashCodeModal.css';
 import axios from 'axios';
 import { useState } from 'react';
+import {useHistory} from 'react-router-dom';
+import _ from 'lodash';
 
 function HashCodeModal(props){
   let currentBox=props.selectedBox;
   let [hashCode,setHashCode]=useState("");
-  
+  let setBoxes = props.setBoxes;
+  let boxes = props.boxes;
+
   //controller에 hashcode 값을 보내는 함수
   function sendHashCode(){
     let data= new FormData();
@@ -34,6 +38,7 @@ function HashCodeModal(props){
     })
     .catch(e => {
       alert("비밀번호가 일치하지 않습니다")
+
     })
   }
   return (
@@ -56,7 +61,13 @@ function HashCodeModal(props){
               console.log(hashCode);
             }}/></main>
           <footer>
-            <button onClick={sendHashCode}>
+            <button onClick={
+              ()=>{
+                sendHashCode();
+                props.setKeyModalToggle(false);
+                props.setSelectedBox(null);
+              }
+            }>
               {' '}
               확인{' '}
             </button>

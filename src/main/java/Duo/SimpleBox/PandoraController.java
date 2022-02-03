@@ -27,7 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PandoraController {
     private final PandoraService pandoraService;
-    private String directoryPath="/Users/SOO/Desktop/SimpleBox/SimpleBox/src/main/resources/static";
+    private String directoryPath="/SpringBoot/Simplebox/src/main/resources/static";
 
     @PostMapping("/pandora")
     public String savePandora(@RequestParam("files") MultipartFile file,
@@ -62,9 +62,12 @@ public class PandoraController {
     public String searchPandoraByKeyword(@RequestParam("keyword") String keyword)
     throws JsonProcessingException{
 
-        List<Pandora> searchedPandora= pandoraService.findPandoraByWord(keyword);
+        List<Pandora> searchedPandora = pandoraService.findPandoraByWord(keyword);
         List<Map<String,String>> pandoraList=new ArrayList<Map<String,String>>();
         for(Pandora pandora:searchedPandora){
+            if(pandora.getCount() <= 0){
+                continue;
+            }
             Map<String, String> map = new HashMap<>();
             map.put("id",pandora.getId().toString());
             map.put("name",pandora.getName());
@@ -87,6 +90,7 @@ public class PandoraController {
 
         Long downloadId = Long.parseLong(pandoraId);
         Pandora downloadedPandora = pandoraService.findOne(downloadId);
+        pandoraService.decreaseCount(downloadId);
         byte[] bytes=null;
 
         // db에 있는 pandora의 key값과 react 에서 받은 hashcode 값이 같으면 받아옴.
@@ -106,6 +110,12 @@ public class PandoraController {
             response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
         }
         return bytes;
+    }
+
+    @PostMapping("/pandora/count")
+    public int checkCount(@RequestParam("pandoraId")String pandoraId){
+        Long downloadId = Long.parseLong(pandoraId);
+        return pandoraService.findOne(downloadId).getCount();
     }
 
     private void saveFile(MultipartFile file,String directoryPath) throws IOException{

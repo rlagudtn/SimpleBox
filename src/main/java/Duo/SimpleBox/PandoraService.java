@@ -21,6 +21,12 @@ public class PandoraService {
         return pandora.getId();
     }
 
+    @Transactional
+    public void decreaseCount(Long id){
+        Pandora pandora = pandoraRepository.findOne(id);
+        pandora.decrease();
+    }
+
     public List<Pandora> findPandoraByName(String name){
         return pandoraRepository.findByName(name);
     }

@@ -2,6 +2,7 @@ package Duo.SimpleBox;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,10 @@ public class Pandora {
         this.count=count;
         this.fileLocation = fileLocation;
         this.fileName=fileName;
+    }
+
+    void decrease(){
+        this.count -= 1;
     }
 
     @Id @GeneratedValue
