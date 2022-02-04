@@ -12,12 +12,7 @@ function HashCodeModal(props){
   let [downloadToggle,setDownloadToggle]=useState(false);
   
 
-  useEffect(()=>{
-    if(downloadToggle===true){
-      console.log(downloadToggle);
-      searchBoxes(props.keyword,props.setBoxes);
-    }
-  },[downloadToggle])
+  
   //controller에 hashcode 값을 보내는 함수
   async function sendHashCode(){
     let data= new FormData();
@@ -43,6 +38,11 @@ function HashCodeModal(props){
         link.click();
         link.remove();
         
+        currentBox.decreaseCount();
+        /////개수가 0인경우 keyword로 다시 검색해서 결과를 화면에 뿌려줌
+        if(currentBox.count==0){
+          searchBoxes(props.keyword,props.setBoxes);
+        }
     })
     .catch(e => {
       alert("비밀번호가 일치하지 않습니다")
