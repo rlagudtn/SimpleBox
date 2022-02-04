@@ -71,6 +71,7 @@ public class PandoraController {
             Map<String, String> map = new HashMap<>();
             map.put("id",pandora.getId().toString());
             map.put("name",pandora.getName());
+            map.put("count",Integer.toString(pandora.getCount()));
             pandoraList.add(map);
         }
 
@@ -90,11 +91,12 @@ public class PandoraController {
 
         Long downloadId = Long.parseLong(pandoraId);
         Pandora downloadedPandora = pandoraService.findOne(downloadId);
-        pandoraService.decreaseCount(downloadId);
         byte[] bytes=null;
 
         // db에 있는 pandora의 key값과 react 에서 받은 hashcode 값이 같으면 받아옴.
         if(downloadedPandora.getKey().equals(hashCode)){
+            pandoraService.decreaseCount(downloadId);
+
             String fileName=downloadedPandora.getFileName();
             String filePath=downloadedPandora.getFileLocation();
 

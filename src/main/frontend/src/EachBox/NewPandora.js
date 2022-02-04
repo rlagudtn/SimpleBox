@@ -11,10 +11,6 @@ function NewPandora(){
     fd.append('count', document.querySelector('#quantity').value);
     fd.append('files', document.querySelector('#boxfile').files[0]);
     fd.append('code', document.querySelector('#code').value);
-    // 서버에 보낼 데이터들 확인
-    for(var pair of fd.entries()){
-      console.log(pair[0] + ', ' + pair[1]);
-    }
 
     // 전송
     axios.post("/pandora", fd, {
