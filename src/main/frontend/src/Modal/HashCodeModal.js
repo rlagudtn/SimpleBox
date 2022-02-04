@@ -10,9 +10,7 @@ function HashCodeModal(props){
   let currentBox=props.selectedBox;
   let [hashCode,setHashCode]=useState("");
   let [downloadToggle,setDownloadToggle]=useState(false);
-  
 
-  
   //controller에 hashcode 값을 보내는 함수
   async function sendHashCode(){
     let data= new FormData();
