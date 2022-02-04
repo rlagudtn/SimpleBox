@@ -89,9 +89,15 @@ public class PandoraController {
                                    @RequestParam("hashCode")String hashCode) throws IOException{
         System.out.println(pandoraId);
 
+
         Long downloadId = Long.parseLong(pandoraId);
         Pandora downloadedPandora = pandoraService.findOne(downloadId);
         byte[] bytes=null;
+
+        // 박스의 count가 0이면 에러 전송
+        if(downloadedPandora.getCount() <= 0){
+            response.sendError(HttpServletResponse.SC_GONE);
+        }
 
         // db에 있는 pandora의 key값과 react 에서 받은 hashcode 값이 같으면 받아옴.
         if(downloadedPandora.getKey().equals(hashCode)){
