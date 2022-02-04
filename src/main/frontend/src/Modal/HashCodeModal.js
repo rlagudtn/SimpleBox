@@ -1,22 +1,29 @@
 import './HashCodeModal.css';
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import {useHistory} from 'react-router-dom';
+import {searchBoxes} from '../Function/search.js'
+
 import _ from 'lodash';
 
 function HashCodeModal(props){
   let currentBox=props.selectedBox;
   let [hashCode,setHashCode]=useState("");
-  let setBoxes = props.setBoxes;
-  let boxes = props.boxes;
+  let [downloadToggle,setDownloadToggle]=useState(false);
+  
 
+  useEffect(()=>{
+    if(downloadToggle===true){
+      console.log(downloadToggle);
+      searchBoxes(props.keyword,props.setBoxes);
+    }
+  },[downloadToggle])
   //controller에 hashcode 값을 보내는 함수
-  function sendHashCode(){
+  async function sendHashCode(){
     let data= new FormData();
-    data.append('pandoraId',currentBox['id']);
+    data.append('pandoraId',currentBox.id);
     data.append('hashCode',hashCode);
-    console.log(data);
-    axios({
+    await axios({
       method:"post",
       url:"/pandora/download",
       data:data,
@@ -35,17 +42,17 @@ function HashCodeModal(props){
         document.body.appendChild(link);
         link.click();
         link.remove();
+        
     })
     .catch(e => {
       alert("비밀번호가 일치하지 않습니다")
-
     })
   }
   return (
     <div className='openModal modal'>
       <section>
           <header>
-            {currentBox["name"]}
+            {currentBox.title}
             <button className="close" onClick={
               ()=>{
                 props.setKeyModalToggle(false);
@@ -58,12 +65,13 @@ function HashCodeModal(props){
           <main> <p>박스키를 입력하세요.</p>
             <input type="password" placeholder='password' onChange={(e)=>{
               setHashCode(e.target.value)
-              console.log(hashCode);
             }}/></main>
           <footer>
             <button onClick={
               ()=>{
                 sendHashCode();
+                setDownloadToggle(true);
+
                 props.setKeyModalToggle(false);
                 props.setSelectedBox(null);
               }

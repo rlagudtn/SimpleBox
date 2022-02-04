@@ -1,46 +1,61 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HashCodeModal from '../Modal/HashCodeModal';
 
 // import PopupkeyModalToggle from '../Modal/PopupkeyModalToggle';
 import {Row,Col,Container} from 'react-bootstrap';
 import NavbarSub from '../LayoutComponent/NavbarSub';
 import boxicon from '../boxicon.png'
+import { Pandora } from '../DTO/Box';
 
 function PandoraMain(){
-  //검색해서 얻은 결과
-  let [boxes, setBoxes]=useState([{"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"}]);
-  // API로 받은 박스 제목들
-  let [titles, settitles] = useState(['box_title1', 'box_title2', 'box_title3']);
+  //검색어
+  let [keyword,setKeyword]=useState("");
 
-  // 실제 보여지는 박스 제목들
-  let [shows, setshows] = useState(titles.slice());
+  //검색해서 얻은 결과
+  let [boxes, setBoxes]=useState([{"id":"1","name":"새박스","count":"1"},{"id":"2","name":"스프링 실전","count":"0"}]);
+
+  let[pandoraList,setPandoraList]=useState([]);
+
   // 박스키 입력 팝업 state
   let [keyModalToggle, setKeyModalToggle] = useState(false);
 
   // 클릭한 박스 제목 
   let [selectedBox, setSelectedBox] = useState(null);
 
+  //controller에서 받아온 box들을 pandoraList로 변경함
+  useEffect(()=>{
+    let temp=[];
+    boxes.map((item,i)=>{
+      temp.push(new Pandora(item["id"],item["name"],item["count"]));
+    });
+    setPandoraList(temp);
+  },[boxes]);
+  useEffect(()=>{
+
+  },[pandoraList])
   return(
     <div>
       {/* 상단 옵션 바 */}
       <Container className='main_optionbar'> 
-        <NavbarSub titles={titles} setshows={setshows} setBoxes={setBoxes} />
+        <NavbarSub keyword={keyword} setKeyword={setKeyword}  setBoxes={setBoxes} />
       </Container>
 
       {/* 박스들 배치 */}
       <Container className='main_boxes'>
         <Row>
           {
-            boxes.map((item, index) => {
-              return <BoxItem item={item} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox}></BoxItem>
+            pandoraList.map((item, index) => {
+              if(item.count>0)
+                return <BoxItem key={index} item={item} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox}></BoxItem>
             })
-            
           }
 
           {/* 박스를 클릭할 시 박스키 입력 팝업 */}
           
           {keyModalToggle!=false?
-          <HashCodeModal  selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle} boxes={boxes} setBoxes={setBoxes}/>:
+          <HashCodeModal  selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle}
+          boxes={boxes} setBoxes={setBoxes} keyword={keyword}
+          pandoraList={pandoraList} setPandoraList={setPandoraList}/>:
           null
           }
         </Row>
@@ -58,7 +73,7 @@ function BoxItem(props){
           props.setSelectedBox(props.item);
         }}>
         <img src={boxicon}/><br/>
-        {props.item["name"]}
+        {props.item.title}
       </Col>
     </>
   )
