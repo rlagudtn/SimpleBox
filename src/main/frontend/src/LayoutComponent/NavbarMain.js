@@ -1,9 +1,10 @@
 import {Navbar,Nav, NavDropdown,Container} from 'react-bootstrap';
+import "./NavbarMain.css"
 function NavbarMain(){
     return (
       <div>
         <Navbar bg="light" expand="lg">
-          <Container className='navbar'>
+          <Container className='navbar' >
             <Navbar.Brand href="/">▣ simplebox</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

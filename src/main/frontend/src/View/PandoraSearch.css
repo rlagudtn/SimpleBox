@@ -1,0 +1,42 @@
+@import url('../_reset.css');
+
+.pandora-search-main{
+  margin: 0 3%;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pandora-title{
+  margin-top: 7%;
+  margin-bottom: 2%;
+}
+.search-area{
+  display: inline-flex;  
+  height: 50px;
+  border-radius:calc(70px/2);
+  border: 1px solid lightgray;
+  padding: 10px;
+}
+.search-icon{
+  width: 40px;
+  padding: 0;
+  border-radius: 20px;
+  margin-right: 5px;
+}
+
+.search-area input{
+  border: none;
+  line-height: 70px;
+  width: 350px;
+}
+.search-area input:focus{
+  outline: none;
+}
+.jumbotron{
+  width: 430px;
+  height: 80%;
+  margin-top: 2%;
+  background-image: url('../container.jpg');
+  background-size : cover;
+}

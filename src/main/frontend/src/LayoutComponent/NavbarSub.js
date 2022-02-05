@@ -1,25 +1,21 @@
 import {Row,Col,Button} from 'react-bootstrap';
 import{Link} from 'react-router-dom';
-import search from '../search.png';
-import { useState } from 'react';
 import {searchBoxes} from '../Function/search.js'
+import "./NavbarSub.css"
 function NavbarSub(props){
   return(
-    <div>
-      <Row>
-        <Col>
-          <input type="text" placeholder=' 박스 명 검색' onChange={(e) => {
-            props.setKeyword(e.target.value);
-            
-          }} />
-          <Button variant="none" onClick={()=>{
-            searchBoxes(props.keyword,props.setBoxes)
-          }} ><img src={search} style={{ 'marginLeft': '1%' }}/></Button>
-        </Col>
-        <Col xs={3}>
-          <Link to='/new'><Button variant="primary" style={{ 'marginLeft': '20%' }} >새 박스</Button></Link>
-        </Col>
-      </Row>
+    <div className='sub-nav'>
+      <div className="search">
+        <input type="text" size={30} placeholder=' 박스 명 검색' onChange={(e) => {
+          props.setKeyword(e.target.value);
+        }} />
+        <button className='search-btn btn' onClick={() => {
+          searchBoxes(props.keyword, props.setBoxes)
+        }} ><i class="fas fa-search"></i></button>
+      </div>
+      <div className="new-box ">
+        <Link to='/new'><button className='new-btn btn'>새 박스</button></Link>
+      </div>
     </div>
   );
 }

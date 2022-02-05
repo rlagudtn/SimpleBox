@@ -2,21 +2,15 @@
   padding-left: 2%;
   margin-left: 0;
 }
+.content{
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
 
-.main_container{
-  margin-top: 1%;
-  padding-left: 4%;
-  margin-left: 0;
 }
-
 .sidebar{
-  font-size: large;
+  width:180px;
 }
-
-.main_boxes{
-  margin-top: 2%;
-}
-
-.create_contents{
-  margin-top: 2%;
+.main{
+  width: 100%;
 }
