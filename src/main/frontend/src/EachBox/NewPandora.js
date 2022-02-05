@@ -56,7 +56,7 @@ function NewPandora(){
             <Button variant="success" style={{ 'marginLeft': '3%' }} onClick={createBox}>저장</Button>
             <br /><br />
             <div className="input-group mb-3">
-              <input type="file" className="form-control" id="boxfile" accept='image/jpg,image/png,image/jpeg,image/gif' />
+              <input type="file" className="form-control" id="boxfile" accept='파일 확장자|image/*' />
               <label className="input-group-text" htmlFor="inputGroupFile02">Upload</label>
             </div>
           </Col>

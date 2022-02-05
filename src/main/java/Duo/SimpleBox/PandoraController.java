@@ -27,7 +27,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PandoraController {
     private final PandoraService pandoraService;
-    private String directoryPath="/SpringBoot/Simplebox/src/main/resources/static";
+
+    private String directoryPath="C:\\Users\\SOO\\Desktop\\SimpleBox\\SimpleBox\\src\\main\\resources\\src";
 
     @PostMapping("/pandora")
     public String savePandora(@RequestParam("files") MultipartFile file,
