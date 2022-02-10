@@ -35,7 +35,7 @@ public class PandoraTest {
         Assertions.assertThat(pandora1.getId()).isEqualTo(pandora.getId());
 
     }
-    
+
     @Test
     @Transactional
     @Rollback(value = false)
@@ -53,7 +53,7 @@ public class PandoraTest {
         Assertions.assertThat(pandoraList.size()).isEqualTo(2);
 
     }
-    
-    
-    
+
+
+
 }

@@ -12,7 +12,7 @@ function PandoraMain(){
   let [keyword,setKeyword]=useState("");
 
   //검색해서 얻은 결과
-  let [boxes, setBoxes]=useState([{"id":"1","name":"새박스","count":"1"},{"id":"2","name":"스프링 실전","count":"0"}]);
+  let [boxes, setBoxes]=useState([{"id":"1","name":"새박스","count":"1"}]);
 
   let[pandoraList,setPandoraList]=useState([]);
 
@@ -45,8 +45,7 @@ function PandoraMain(){
         <Row>
           {
             pandoraList.map((item, index) => {
-              if(item.count>0)
-                return <BoxItem key={index} item={item} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox}></BoxItem>
+              return <BoxItem key={index} item={item} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox}></BoxItem>
             })
           }
 

@@ -19,7 +19,6 @@ function App() {
     <div className="App">
       {/* 네비게이션 바 */}
       <NavbarMain/>
-
       {/* 전체 페이지 */}
       <Container className='main_container'>
         <Row>
@@ -43,8 +42,6 @@ function App() {
             <Route exact path='/new'>
               <NewPandora/>
             </Route>
-
-            {/* 박스 내용물 나타내기 #3 */}
 
             </Switch>
           </Col>

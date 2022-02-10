@@ -28,27 +28,29 @@ import java.util.Map;
 public class PandoraController {
     private final PandoraService pandoraService;
 
-    private String directoryPath="C:\\Users\\SOO\\Desktop\\SimpleBox\\SimpleBox\\src\\main\\resources\\src";
+    private String directoryPath="C:/SpringBoot/SimpleBox/src/main/resources/static";
 
     @PostMapping("/pandora")
-    public String savePandora(@RequestParam("files") MultipartFile file,
-                              @RequestParam("name")String name,
-                              @RequestParam("count")String count,
+    public String savePandora(@RequestParam("files") List<MultipartFile> files,
+                              @RequestParam("name") String name,
+                              @RequestParam("count") String count,
                               @RequestParam("code") String code) throws IOException {
-        System.out.println(file);
-        System.out.println(name);
+
         String ret="";
         ///임시 작업 중
-
         int iCount=Integer.parseInt(count);
 
         //file 저장.
-
         try{
-            saveFile(file,directoryPath);
+            String fileNames = "";
+            for(MultipartFile file : files){
+                saveFile(file, directoryPath);
+                fileNames += file.getOriginalFilename();
+                fileNames += " ";
+            }
 
             //db에는 fileLocation 저장
-            Long savedPandoraId = pandoraService.makePandora(name,code, iCount, directoryPath,file.getOriginalFilename());
+            Long savedPandoraId = pandoraService.makePandora(name,code, iCount, directoryPath, fileNames);
             Pandora newPandora = pandoraService.findOne(savedPandoraId);
             ret=newPandora.getKey();
         }
@@ -85,39 +87,54 @@ public class PandoraController {
     }
 
     @PostMapping("/pandora/download")
-    public byte[] downloadPandora(HttpServletResponse response,
+    public int downloadPandora(HttpServletResponse response,
                                   @RequestParam("pandoraId")String pandoraId,
                                    @RequestParam("hashCode")String hashCode) throws IOException{
         System.out.println(pandoraId);
 
-
         Long downloadId = Long.parseLong(pandoraId);
         Pandora downloadedPandora = pandoraService.findOne(downloadId);
-        byte[] bytes=null;
 
         // 박스의 count가 0이면 에러 전송
         if(downloadedPandora.getCount() <= 0){
             response.sendError(HttpServletResponse.SC_GONE);
+            return 0;
         }
 
         // db에 있는 pandora의 key값과 react 에서 받은 hashcode 값이 같으면 받아옴.
         if(downloadedPandora.getKey().equals(hashCode)){
             pandoraService.decreaseCount(downloadId);
-
-            String fileName=downloadedPandora.getFileName();
-            String filePath=downloadedPandora.getFileLocation();
-
-            File file=new File(filePath,fileName);
-            bytes= FileCopyUtils.copyToByteArray(file);
-
-            String fn = new String(file.getName().getBytes(), "utf-8");
-            // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
-            response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
-            response.setContentLength(bytes.length);
+            String fileNames=downloadedPandora.getFileNames();
+            String[] files = fileNames.split(" ");
+            return files.length;
         }
         else{
             response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
         }
+        return 0;
+    }
+
+    @PostMapping("/pandora/download/file")
+    public byte[] downloadPandoraFile(HttpServletResponse response,
+                                      @RequestParam("pandoraId")String pandoraId,
+                                      @RequestParam("index")int index) throws IOException{
+
+        Long downloadId = Long.parseLong(pandoraId);
+        Pandora downloadedPandora = pandoraService.findOne(downloadId);
+        byte[] bytes=null;
+
+        String fileNames=downloadedPandora.getFileNames();
+        String filePath=downloadedPandora.getFileLocation();
+        String[] files = fileNames.split(" ");
+
+        File file=new File(filePath, files[index]);
+        bytes= FileCopyUtils.copyToByteArray(file);
+        String fn = new String(file.getName().getBytes(), "utf-8");
+
+        // 다운로드 되거나 로컬에 저장되는 용도로 쓰이는지를 알려주는 헤더
+        response.setHeader("Content-Disposition", "attachment;filename=" + file.getName());
+        response.setContentLength(bytes.length);
+
         return bytes;
     }
 

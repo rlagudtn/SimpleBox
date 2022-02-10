@@ -13,8 +13,8 @@ public class PandoraService {
     private final PandoraRepository pandoraRepository;
 
     @Transactional
-    public Long makePandora(String name,String code,int count,String fileLocation,String fileName){
-        Pandora pandora=new Pandora(name,code,count,fileLocation,fileName);
+    public Long makePandora(String name,String code,int count,String fileLocation,String fileNames){
+        Pandora pandora=new Pandora(name,code,count,fileLocation,fileNames);
 
         pandoraRepository.save(pandora);
 
