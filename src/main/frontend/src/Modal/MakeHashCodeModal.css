@@ -62,15 +62,9 @@
     /* 팝업이 열릴때 스르륵 열리는 효과 */
     animation: modal-bg-show 0.3s;
   }
-  .wrong-key {
-    margin-top: 1%;
-    font-size: smaller;
-    color: red;
-  }
-  .nothing-space{
-    margin-top: 1%;
-    font-size: smaller;
-    color: white;
+
+  #save-button:disabled{
+    background-color: rgba(0, 0, 0, 0.3);
   }
 
   @keyframes modal-show {
