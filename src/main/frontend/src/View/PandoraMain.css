@@ -1,0 +1,31 @@
+@import url('../_reset.css');
+
+.box-container{
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4,1fr);
+}
+
+.box-item{
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 10px;
+  background-color: lightgoldenrodyellow;
+  border: 1px solid lightgray;
+}
+
+.box-item img{
+  width: 100%;
+}
+
+.box-title{
+  font-size: small;
+}
+/* 큰화면에 대한 grid */
+@media screen and (min-width:1024px){
+  .box-container{
+    grid-template-columns: repeat(6,1fr);
+  }
+}

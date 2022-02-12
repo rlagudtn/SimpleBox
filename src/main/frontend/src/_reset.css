@@ -21,7 +21,6 @@ ul,li{
 button {
   border: 1px solid lightgray;
   padding:2px 5px 2px 5px;
-  border-radius: 4px;
   background-color: transparent;
 }
 .btn:hover{

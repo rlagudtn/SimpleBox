@@ -1,5 +1,10 @@
 @import url('../_reset.css');
-
+.title-section{
+  display: flex;
+  width: 400px;
+  justify-content: space-between;
+  align-items: baseline;
+}
 .pandora-search-main{
   margin: 0 3%;
   height: 75vh;
@@ -7,11 +12,15 @@
   flex-direction: column;
   align-items: center;
 }
+.new-btn {
+  height: fit-content;
+}
 .pandora-title{
   margin-top: 7%;
   margin-bottom: 2%;
 }
 .search-area{
+  margin-top: 1em;
   display: inline-flex;  
   height: 50px;
   border-radius:calc(70px/2);
@@ -34,8 +43,8 @@
   outline: none;
 }
 .jumbotron{
-  width: 430px;
-  height: 80%;
+  width:500px;
+  height: 70%;
   margin-top: 2%;
   background-image: url('../container.jpg');
   background-size : cover;
