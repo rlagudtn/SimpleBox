@@ -1,0 +1,56 @@
+.input-file-button {
+    display: inline;
+    border: 1px solid rgb(189, 189, 189);
+    margin-right: 0.5%;
+    padding: 0.5%;
+    font-size: small;
+}
+
+.input-file-button:hover {
+    display: inline;
+    border: 1px solid gray;
+    margin-right: 0.5%;
+    padding: 0.5%;
+    font-size: small;
+    cursor: pointer;
+}
+
+.file-list {
+    margin-top: 1%;
+    display: inline-block;
+    border: 1px solid rgb(189, 189, 189);
+    width: 70%;
+    height: 80%;
+}
+
+.file-list-header {
+    background-color: rgb(247, 244, 244);
+    border-bottom: 1px solid rgb(189, 189, 189);
+    padding-left: 1%;
+    padding-right: 1%;
+    display: grid;
+    grid-template-columns: 8fr 1fr;
+}
+
+.file-list-files {
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.form-check-label:hover {
+    cursor: pointer;
+}
+
+.file-item {
+    display: grid;
+    grid-template-columns: 8fr 1fr 0.05fr;
+}
+
+.size {
+    text-align: right;
+}
+
+.drag-drop-notion {
+    position: relative;
+    left: 37%; top: 30px;
+}
