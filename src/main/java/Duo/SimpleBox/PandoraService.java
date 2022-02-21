@@ -11,13 +11,26 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PandoraService {
     private final PandoraRepository pandoraRepository;
-
+    private final FileRepository fileRepository;
     @Transactional
-    public Long makePandora(String name,String code,int count,String fileLocation,String fileNames){
-        Pandora pandora=new Pandora(name,code,count,fileLocation,fileNames);
+    public Long makePandora(String name, String code, int count, String path, List<String> fileNames) {
+        Pandora pandora=new Pandora(name,code,count);
+        for (String fileName : fileNames) {
+            File file = File.createFile(pandora, fileName, path);
+            fileRepository.save(file);
+            pandora.addFile(file);
+        }
+        pandoraRepository.save(pandora);
+        return pandora.getId();
+    }
+    @Transactional
+    public Long makePandora(String name,String code,int count,String fileLocation,String fileName){
+        Pandora pandora=new Pandora(name,code,count,fileLocation,fileName);
 
         pandoraRepository.save(pandora);
 
+
+        /////////////
         return pandora.getId();
     }
 

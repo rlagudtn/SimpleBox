@@ -38,15 +38,18 @@ public class PandoraController {
         String ret="";
         ///임시 작업 중
         int iCount=Integer.parseInt(count);
-
+        List<String> fileNames=new ArrayList<>();
         //file 저장.
         try{
-            String fileNames = "";
-            for(MultipartFile file : files){
-                saveFile(file, directoryPath);
-                fileNames += file.getOriginalFilename();
-                fileNames += " ";
+            for (MultipartFile file : files) {
+                fileNames.add(file.getOriginalFilename());
+                saveFile(file,directoryPath);
             }
+//            for(MultipartFile file : files){
+//                saveFile(file, directoryPath);
+//                fileNames += file.getOriginalFilename();
+//                fileNames += " ";
+//            }
 
             //db에는 fileLocation 저장
             Long savedPandoraId = pandoraService.makePandora(name,code, iCount, directoryPath, fileNames);
@@ -80,8 +83,7 @@ public class PandoraController {
         ObjectMapper mapper = new ObjectMapper();
         String ret=mapper.writeValueAsString(pandoraList);
         System.out.println(ret);
-    //react에서
-    //let list = JSON.parse ( result~~ );
+
         return ret;
     }
 
