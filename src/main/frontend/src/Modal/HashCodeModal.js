@@ -9,10 +9,11 @@ import _ from 'lodash';
 function HashCodeModal(props){
   let currentBox=props.selectedBox;
   let [hashCode,setHashCode] = useState("");
+  let [files,setFiles]=useState([{"fileId":"1","fileName":"zip"}]);
   let [status, setStatus] = useState("password");
   let [isValid, setIsValid] = useState(true);
   let [isWrongKey, setIsWrongKey] = useState(false);
-
+  
   useEffect(()=>{
     let fd = new FormData();
     fd.append('pandoraId',currentBox.id);
@@ -30,48 +31,49 @@ function HashCodeModal(props){
   //controller에 hashcode 값을 보내는 함수
   function sendHashCode(){
     let data = new FormData();
-    data.append('pandoraId', currentBox.id);
-    data.append('hashCode', hashCode);
+    data.append("pandoraId", currentBox.id);
+    data.append("hashCode", hashCode);
     axios({
       method:"post",
       url:"/pandora/download",
       data: data,
     }).then(async response => {
-
+      setFiles(response.data);
+      console.log(response.data);
       setStatus("download");
-      setIsValid(false);
-      for(var i=0; i<response.data; i++){
-        let tempFd = new FormData();
-        tempFd.append('pandoraId', currentBox.id);
-        tempFd.append('index', i);
+      // setIsValid(false);
+      // for(var i=0; i<response.data; i++){
+      //   let tempFd = new FormData();
+      //   tempFd.append('pandoraId', currentBox.id);
+      //   tempFd.append('index', i);
 
-        await axios({
-          method:"post",
-          url:"/pandora/download/file",
-          data:tempFd,
-          responseType:"blob"
-        }).then(response => {
-          const name=response.headers["content-disposition"].split("filename=")[1].replace(/"/g,"");
-          // Blob 생성자 함수로 URL 생성하여 할당
-          const url = window.URL.createObjectURL(response.data);
-          // <a> 요소 동적 생성
-          const link = document.createElement('a');
-          // <a> 요소에 href attribute에 url 할당
-          link.href = url;
-          // <a> 요소에 download attribute 와 value 동적 할당
-          link.setAttribute('download', name);
-          // link html을 파일 이름으로 설정
-          link.innerHTML = name;
-          // file-list div 내에 링크 생성
-          document.querySelector('.file-list').appendChild(link);
-          // 줄바꿈을 위한 br태그 추가
-          const br = document.createElement('br');
-          document.querySelector('.file-list').appendChild(br);
-        })
-        .catch(e => {
-          alert("오류가 발생하였습니다.");
-        })  
-      }
+      //   await axios({
+      //     method:"post",
+      //     url:"/pandora/download/file",
+      //     data:tempFd,
+      //     responseType:"blob"
+      //   }).then(response => {
+      //     const name=response.headers["content-disposition"].split("filename=")[1].replace(/"/g,"");
+      //     // Blob 생성자 함수로 URL 생성하여 할당
+      //     const url = window.URL.createObjectURL(response.data);
+      //     // <a> 요소 동적 생성
+      //     const link = document.createElement('a');
+      //     // <a> 요소에 href attribute에 url 할당
+      //     link.href = url;
+      //     // <a> 요소에 download attribute 와 value 동적 할당
+      //     link.setAttribute('download', name);
+      //     // link html을 파일 이름으로 설정
+      //     link.innerHTML = name;
+      //     // file-list div 내에 링크 생성
+      //     document.querySelector('.file-list').appendChild(link);
+      //     // 줄바꿈을 위한 br태그 추가
+      //     const br = document.createElement('br');
+      //     document.querySelector('.file-list').appendChild(br);
+      //   })
+      //   .catch(e => {
+      //     alert("오류가 발생하였습니다.11");
+      //   })  
+      // }
     })
     .catch(e => {
       if(e.response.status == 406){
@@ -84,7 +86,7 @@ function HashCodeModal(props){
         props.setSelectedBox(null);
       }
       else{
-        alert("오류가 발생하였습니다.");
+        alert("오류가 발생하였습니다.22");
       }
     })
     
@@ -105,7 +107,7 @@ function HashCodeModal(props){
           </header>
               
           {
-            <StatusRender status={status} setHashCode={setHashCode} isWrongKey={isWrongKey} setIsWrongKey={setIsWrongKey}></StatusRender>
+            <StatusRender status={status} files={files} setHashCode={setHashCode} isWrongKey={isWrongKey} setIsWrongKey={setIsWrongKey}></StatusRender>
           }
 
           <footer>
@@ -121,7 +123,7 @@ function HashCodeModal(props){
               }
             }>
               {' '}
-              확인{' '}
+              확인2{' '}
             </button>
           </footer> 
           
@@ -131,6 +133,7 @@ function HashCodeModal(props){
 }
 
 function StatusRender(props){
+  
   if(props.status == "password"){
     return(<>
       <main> 
@@ -150,7 +153,17 @@ function StatusRender(props){
   }
   else if(props.status == "download"){
     return(<>
-      <main> <div className='file-list'></div> </main> 
+      <main> 
+        <div className='file-list'>
+          {
+            props.files.map((item,index)=>{
+              return <div onClick={}
+
+              >{item["fileName"]}</div>
+            })
+          }
+        </div> 
+      </main> 
     </>)
   }
   else{

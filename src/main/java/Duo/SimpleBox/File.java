@@ -15,7 +15,7 @@ public class File {
     private String name;
 
     private String path;
-
+    File(){}
 
     File(String name, String path) {
         this.name = name;

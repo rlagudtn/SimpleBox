@@ -88,10 +88,9 @@ public class PandoraController {
     }
 
     @PostMapping("/pandora/download")
-    public int downloadPandora(HttpServletResponse response,
+    public String downloadPandora(HttpServletResponse response,
                                   @RequestParam("pandoraId")String pandoraId,
                                    @RequestParam("hashCode")String hashCode) throws IOException{
-        System.out.println(pandoraId);
 
         Long downloadId = Long.parseLong(pandoraId);
         Pandora downloadedPandora = pandoraService.findOne(downloadId);
@@ -99,20 +98,33 @@ public class PandoraController {
         // 박스의 count가 0이면 에러 전송
         if(downloadedPandora.getCount() <= 0){
             response.sendError(HttpServletResponse.SC_GONE);
-            return 0;
+            return "";
         }
+        System.out.println(downloadedPandora.getId());
 
         // db에 있는 pandora의 key값과 react 에서 받은 hashcode 값이 같으면 받아옴.
         if(downloadedPandora.getKey().equals(hashCode)){
-            pandoraService.decreaseCount(downloadId);
-            String fileNames=downloadedPandora.getFileNames();
-            String[] files = fileNames.split(" ");
-            return files.length;
+            System.out.println("code 비교");
+//            pandoraService.decreaseCount(downloadId);
+            System.out.print("size: ");
+
+            List<Duo.SimpleBox.File> files = downloadedPandora.getFiles();
+            System.out.println(files.size());
+            List<Map<String, String>> filesJson = new ArrayList<>();
+            for (Duo.SimpleBox.File file : files) {
+                Map<String,String> map=new HashMap<>();
+                map.put("fileId", file.getId().toString());
+                map.put("fileName", file.getName());
+                filesJson.add(map);
+            }
+
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(filesJson );
         }
         else{
             response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE);
         }
-        return 0;
+        return "";
     }
 
     @PostMapping("/pandora/download/file")
@@ -124,11 +136,13 @@ public class PandoraController {
         Pandora downloadedPandora = pandoraService.findOne(downloadId);
         byte[] bytes=null;
 
-        String fileNames=downloadedPandora.getFileNames();
-        String filePath=downloadedPandora.getFileLocation();
-        String[] files = fileNames.split(" ");
-
-        File file=new File(filePath, files[index]);
+        List<Duo.SimpleBox.File> files = downloadedPandora.getFiles();
+        String[] fileNames = new String[files.size()];
+        for (int i=0;i<files.size();i++) {
+            fileNames[i]=files.get(i).getName();
+        }
+        String filePath=files.get(0).getPath();
+        File file=new File(filePath, fileNames[index]);
         bytes= FileCopyUtils.copyToByteArray(file);
         String fn = new String(file.getName().getBytes(), "utf-8");
 

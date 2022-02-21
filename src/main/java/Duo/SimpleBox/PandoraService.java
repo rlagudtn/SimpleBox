@@ -24,9 +24,11 @@ public class PandoraService {
         return pandora.getId();
     }
     @Transactional
-    public Long makePandora(String name,String code,int count,String fileLocation,String fileName){
-        Pandora pandora=new Pandora(name,code,count,fileLocation,fileName);
-
+    public Long makePandora(String name,String code,int count,String path,String fileName){
+        Pandora pandora=new Pandora(name,code,count);
+        File file = File.createFile(pandora, fileName, path);
+        fileRepository.save(file);
+        pandora.addFile(file);
         pandoraRepository.save(pandora);
 
 
@@ -38,6 +40,10 @@ public class PandoraService {
     public void decreaseCount(Long id){
         Pandora pandora = pandoraRepository.findOne(id);
         pandora.decrease();
+    }
+
+    public List<File> findFiles(Long pandoraId){
+        return fileRepository.findByPandoraId(pandoraId);
     }
 
     public List<Pandora> findPandoraByName(String name){
