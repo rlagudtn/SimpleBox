@@ -1,86 +1,59 @@
-import './HashCodeModal.css';
+import './BoxItemModal.css';
 import axios from 'axios';
 import { useEffect,useState } from 'react';
-import {useHistory} from 'react-router-dom';
-import {searchBoxes} from '../Function/search.js'
 
 import _ from 'lodash';
 
-function HashCodeModal(props){
+/**
+ * 
+ * 
+ * 
+ */
+ const PASSWORD ="PASSWORD";
+  const DOWNLOAD="DOWNLOAD";
+function BoxItemModal(props){
+  /**
+   * @constant
+   * PASSWORD : 비밀번호를 누르는 상태
+   * DOWNLOAD : 다운로드 가능한 파일들을 보여주는 상태
+   * 
+   * @reference
+   * currentBox : 현재 선택한 박스 객체
+   * 
+   * @state
+   * boxPassword : 사용자가 입력한 박스 비밀번호
+   * configurationFiles : 가져온 박스를 구성하는 파일들
+   * modalStatus : 모달창의 상태를 나타내는 변수
+   * isWrongKey : 비밀번호가 틀렸는지 나타내는 변수
+   */
+ 
   let currentBox=props.selectedBox;
-  let [hashCode,setHashCode] = useState("");
-  let [files,setFiles]=useState([{"fileId":"1","fileName":"zip"}]);
-  let [status, setStatus] = useState("password");
-  let [isValid, setIsValid] = useState(true);
+  let [boxPassword,setBoxPassword] = useState("");
+  let [configurationFiles,setConfigurationFiles]=useState([{"fileId":"1","fileName":"zip"}]);
+  let [modalStatus, setModalStatus] = useState(PASSWORD);
   let [isWrongKey, setIsWrongKey] = useState(false);
   
-  useEffect(()=>{
-    let fd = new FormData();
-    fd.append('pandoraId',currentBox.id);
-    axios({
-      method:"post",
-      url:"/pandora/count",
-      data: fd,
-    }).then(response => {
-      if(response.data <= 0){
-        setStatus("banned");
-        setIsValid(false);
-      }
-    })
-  }, []);
-  //controller에 hashcode 값을 보내는 함수
-  function sendHashCode(){
+ 
+  //controller에 boxPassword 값을 보내는 함수
+  function sendboxPassword(){
     let data = new FormData();
     data.append("pandoraId", currentBox.id);
-    data.append("hashCode", hashCode);
+    data.append("boxPassword", boxPassword);
     axios({
       method:"post",
       url:"/pandora/download",
       data: data,
     }).then(async response => {
-      setFiles(response.data);
+      setConfigurationFiles(response.data);
       console.log(response.data);
-      setStatus("download");
-      // setIsValid(false);
-      // for(var i=0; i<response.data; i++){
-      //   let tempFd = new FormData();
-      //   tempFd.append('pandoraId', currentBox.id);
-      //   tempFd.append('index', i);
-
-      //   await axios({
-      //     method:"post",
-      //     url:"/pandora/download/file",
-      //     data:tempFd,
-      //     responseType:"blob"
-      //   }).then(response => {
-      //     const name=response.headers["content-disposition"].split("filename=")[1].replace(/"/g,"");
-      //     // Blob 생성자 함수로 URL 생성하여 할당
-      //     const url = window.URL.createObjectURL(response.data);
-      //     // <a> 요소 동적 생성
-      //     const link = document.createElement('a');
-      //     // <a> 요소에 href attribute에 url 할당
-      //     link.href = url;
-      //     // <a> 요소에 download attribute 와 value 동적 할당
-      //     link.setAttribute('download', name);
-      //     // link html을 파일 이름으로 설정
-      //     link.innerHTML = name;
-      //     // file-list div 내에 링크 생성
-      //     document.querySelector('.file-list').appendChild(link);
-      //     // 줄바꿈을 위한 br태그 추가
-      //     const br = document.createElement('br');
-      //     document.querySelector('.file-list').appendChild(br);
-      //   })
-      //   .catch(e => {
-      //     alert("오류가 발생하였습니다.11");
-      //   })  
-      // }
+      setModalStatus(DOWNLOAD);
     })
     .catch(e => {
-      if(e.response.status == 406){
+      if(e.response.modalStatus == 406){
         document.querySelector('.boxkey').value = "";
         setIsWrongKey(true);
       }
-      else if(e.response.status == 410){
+      else if(e.response.modalStatus == 410){
         alert("더 이상 열어볼 수 없는 박스입니다.");
         props.setKeyModalToggle(false);
         props.setSelectedBox(null);
@@ -107,14 +80,14 @@ function HashCodeModal(props){
           </header>
               
           {
-            <StatusRender status={status} files={files} setHashCode={setHashCode} isWrongKey={isWrongKey} setIsWrongKey={setIsWrongKey}></StatusRender>
+            <modalStatusRender modalStatus={modalStatus} configurationFiles={configurationFiles} setBoxPassword={setBoxPassword} isWrongKey={isWrongKey} setIsWrongKey={setIsWrongKey}></modalStatusRender>
           }
 
           <footer>
             <button onClick={
               ()=>{
-                if(isValid){
-                  sendHashCode();
+                if(modalStatus == PASSWORD){
+                  sendboxPassword();
                 }
                 else{
                   props.setKeyModalToggle(false);
@@ -132,7 +105,7 @@ function HashCodeModal(props){
   );
 }
 
-function StatusRender(props){
+function modalStatusRender(props){
   function downloadFile(fileId){
     let data = new FormData();
     data.append('fileId', fileId);
@@ -153,19 +126,18 @@ function StatusRender(props){
       document.body.appendChild(link);
       link.click();
       link.remove();
-          
         })
         .catch(e => {
           alert("오류가 발생하였습니다.11");
         })  
       
   }
-  if(props.status == "password"){
+  if(props.modalStatus === PASSWORD){
     return(<>
       <main> 
         <p>박스키를 입력하세요.</p>
         <input className='boxkey' type="password" placeholder='password' onChange={(e)=>{
-          props.setHashCode(e.target.value);
+          props.setBoxPassword(e.target.value);
         }} onFocus={()=>{
           props.setIsWrongKey(false);
         }}/>
@@ -177,13 +149,14 @@ function StatusRender(props){
       </main>
     </>)
   }
-  else if(props.status == "download"){
+  else if(props.modalStatus == DOWNLOAD){
     return(<>
       <main> 
         <div className='file-list'>
           {
-            props.files.map((item,index)=>{
+            props.configurationFiles.map((item,index)=>{
               return <div onClick={()=>{downloadFile(item["fileId"])}}
+
               >{item["fileName"]}</div>
             })
           }
@@ -198,4 +171,4 @@ function StatusRender(props){
   }
 }
 
-export default HashCodeModal;
+export default BoxItemModal;

@@ -1,68 +1,74 @@
 import { useEffect, useState } from 'react';
-import HashCodeModal from '../Modal/HashCodeModal';
+import BoxItemModal from '../Modal/BoxItemModal';
 import {Link, Route, Switch, useHistory} from 'react-router-dom'
-
-// import PopupkeyModalToggle from '../Modal/PopupkeyModalToggle';
-import {Row,Col,Container} from 'react-bootstrap';
 import NavbarSub from '../LayoutComponent/NavbarSub';
-import boxicon from '../boxicon.png'
 import { Pandora } from '../DTO/Box';
 import NewPandora from '../View/NewPandora';
 import PandoraSearch from '../View/PandoraSearch';
-import './PandoraMain.css'
+import BoxListView from './BoxListView';
+
+/**
+ * PandoraMain
+ * 판도라에 대한 기능들 라우팅
+ * 
+ * @author 태욱
+ * @version 0.1, 코드리팩토링
+ * @see 형수
+ */
+
 function PandoraMain(){
-  //검색어
+  /**
+   * @state
+   * keyword : 박스 검색에 사용되는 검색어
+   * searchedBoxObjectGroup : 검색 결과로 받아온 박스 정보 그룹
+   * boxObjectGroup : 박스 객체들 그룹
+   * keyModalToggle : 모달창을 띄우기 위한 변수
+   * selectedBox : 사용자가 클릭한 박스 객체
+   * 
+   * 
+   */
   let [keyword,setKeyword]=useState("");
 
-  //검색해서 얻은 결과
-  let [boxes, setBoxes]=useState([{"id":"1","name":"새박스","count":"1"},{"id":"2","name":"스프링 실전","count":"1"},
-  {"id":"1","name":"새박스","count":"1"},{"id":"2","name":"스프링 실전","count":"1"},
-  {"id":"1","name":"새박스","count":"1"},{"id":"2","name":"스프링 실전","count":"1"},
-  {"id":"1","name":"새박스","count":"1"},{"id":"2","name":"스프링 실전","count":"1"},
-  {"id":"1","name":"새박스","count":"1"},{"id":"2","name":"스프링 실전","count":"1"}]);
+  let [searchedBoxObjectGroup, setsearchedBoxObjectGroup]=useState([{"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
+  {"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
+  {"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
+  {"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
+  {"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"}]);
 
-  let[pandoraList,setPandoraList]=useState([]);
+  let[boxObjectGroup,setBoxObjectGroup]=useState([]);
 
-  // 박스키 입력 팝업 state
   let [keyModalToggle, setKeyModalToggle] = useState(false);
 
-  // 클릭한 박스 제목 
   let [selectedBox, setSelectedBox] = useState(null);
 
-  //controller에서 받아온 box들을 pandoraList로 변경함
+  //controller에서 받아온 box들을 boxObjectGroup로 변경함
   useEffect(()=>{
     let temp=[];
-    boxes.map((item,i)=>{
-      temp.push(new Pandora(item["id"],item["name"],item["count"]));
+    searchedBoxObjectGroup.map((item,i)=>{
+      temp.push(new Pandora(item["id"],item["name"]));
     });
-    setPandoraList(temp);
-  },[boxes]);
+    setBoxObjectGroup(temp);
+  },[searchedBoxObjectGroup]);
   useEffect(()=>{
 
-  },[pandoraList])
+  },[boxObjectGroup])
   return(
     <div>
       <Switch>
         <Route exact path='/'>
-          <PandoraSearch keyword={keyword} setKeyword={setKeyword} setBoxes={setBoxes}  />
+          <PandoraSearch keyword={keyword} setKeyword={setKeyword} setsearchedBoxObjectGroup={setsearchedBoxObjectGroup}  />
         </Route>
         <Route exact path='/list'>
           {/* 상단 옵션 바 */}
           <div className="search-bar">
-            <NavbarSub keyword={keyword} setKeyword={setKeyword} setBoxes={setBoxes} />
-          </div>
-          <div className="pandora-list">
-            <div className="box-container">
-              {pandoraList.map((item, index) => {
-                return <BoxItem key={index} item={item} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox}></BoxItem>
-              })}
-            </div>
+            <NavbarSub keyword={keyword} setKeyword={setKeyword} setsearchedBoxObjectGroup={setsearchedBoxObjectGroup} />
           </div>
 
+          <BoxListView boxObjectGroup={boxObjectGroup} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox} />
+          
           {keyModalToggle != false ?
-            <HashCodeModal selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle}
-              boxes={boxes} setBoxes={setBoxes} keyword={keyword}
-              pandoraList={pandoraList} setPandoraList={setPandoraList} /> :
+            <BoxItemModal selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle} /> 
+            :
             null
           }
         </Route>
@@ -76,22 +82,6 @@ function PandoraMain(){
 
     </div>
   );
-}
-
-// 박스 제목에 따른 각 박스
-function BoxItem(props){
-  return(
-    <div className='box-item' onClick={(e)=>{
-      props.setKeyModalToggle(true);
-      props.setSelectedBox(props.item);
-    }}>
-      <img src={boxicon}/><br/>
-      <div className="box-title">
-        {props.item.title}
-
-      </div>
-    </div>
-  )
 }
 
 export default PandoraMain;

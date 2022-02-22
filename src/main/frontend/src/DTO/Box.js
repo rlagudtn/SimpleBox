@@ -1,11 +1,11 @@
 class Box{
-  constructor(id,title){
-    this._title=title;
-    this._id=id;
+  constructor(id, name) {
+    this._name = name;
+    this._id = id;
   }
   
-  get title(){
-    return this._title;
+  get name(){
+    return this._name;
   }
 
   get id(){
@@ -13,18 +13,10 @@ class Box{
   }
 }
 
-class Pandora extends Box{
-  constructor(id,title,count){
-    super(id,title);
-    this._count=count;
+class Pandora extends Box {
+  constructor(id, name) {
+    super(id, name);
   }
-  get count(){
-    return this._count;
-  }
-  decreaseCount(){
-    this._count-=1;
-  }
-
 }
 
 export {Box,Pandora};
