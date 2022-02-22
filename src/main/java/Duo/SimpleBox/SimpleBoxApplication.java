@@ -8,5 +8,4 @@ public class SimpleBoxApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleBoxApplication.class, args);
 	}
-
 }
