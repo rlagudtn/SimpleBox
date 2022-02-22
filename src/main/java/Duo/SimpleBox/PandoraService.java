@@ -62,5 +62,9 @@ public class PandoraService {
         return "1234";
     }
 
+    public File findFileByFileId(Long fileId) {
+        return fileRepository.findById(fileId);
+    }
+
 
 }

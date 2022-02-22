@@ -129,20 +129,15 @@ public class PandoraController {
 
     @PostMapping("/pandora/download/file")
     public byte[] downloadPandoraFile(HttpServletResponse response,
-                                      @RequestParam("pandoraId")String pandoraId,
-                                      @RequestParam("index")int index) throws IOException{
+                                      @RequestParam("fileId")String fileId
+                                      ) throws IOException{
 
-        Long downloadId = Long.parseLong(pandoraId);
-        Pandora downloadedPandora = pandoraService.findOne(downloadId);
+        Long downloadId = Long.parseLong(fileId);
+        Duo.SimpleBox.File downdloadFile = pandoraService.findFileByFileId(downloadId);
         byte[] bytes=null;
 
-        List<Duo.SimpleBox.File> files = downloadedPandora.getFiles();
-        String[] fileNames = new String[files.size()];
-        for (int i=0;i<files.size();i++) {
-            fileNames[i]=files.get(i).getName();
-        }
-        String filePath=files.get(0).getPath();
-        File file=new File(filePath, fileNames[index]);
+
+        File file=new File(downdloadFile.getPath(), downdloadFile.getName());
         bytes= FileCopyUtils.copyToByteArray(file);
         String fn = new String(file.getName().getBytes(), "utf-8");
 
