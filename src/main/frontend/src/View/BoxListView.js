@@ -1,7 +1,7 @@
 import boxicon from '../boxicon.png'
+import './BoxListView.css'
 
-
-function PandoraListView(props){
+function BoxListView(props){
     return(
         <div className="pandora-list">
             <div className="box-container">
@@ -29,5 +29,5 @@ function BoxItem(props){
     )
   }
   
-export default PandoraListView;
+export default BoxListView;
 

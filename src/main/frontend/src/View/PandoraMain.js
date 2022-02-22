@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import HashCodeModal from '../Modal/HashCodeModal';
+import BoxItemModal from '../Modal/BoxItemModal';
 import {Link, Route, Switch, useHistory} from 'react-router-dom'
 import NavbarSub from '../LayoutComponent/NavbarSub';
 import { Pandora } from '../DTO/Box';
 import NewPandora from '../View/NewPandora';
 import PandoraSearch from '../View/PandoraSearch';
-import './PandoraMain.css'
-import PandoraListView from './PandoraListView';
+import BoxListView from './BoxListView';
 
 /**
  * PandoraMain
@@ -21,7 +20,7 @@ function PandoraMain(){
   /**
    * @state
    * keyword : 박스 검색에 사용되는 검색어
-   * searchedboxObjectGroup : 검색 결과로 받아온 박스 정보 그룹
+   * searchedBoxObjectGroup : 검색 결과로 받아온 박스 정보 그룹
    * boxObjectGroup : 박스 객체들 그룹
    * keyModalToggle : 모달창을 띄우기 위한 변수
    * selectedBox : 사용자가 클릭한 박스 객체
@@ -30,7 +29,7 @@ function PandoraMain(){
    */
   let [keyword,setKeyword]=useState("");
 
-  let [searchedboxObjectGroup, setSearchedboxObjectGroup]=useState([{"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
+  let [searchedBoxObjectGroup, setsearchedBoxObjectGroup]=useState([{"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
   {"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
   {"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
   {"id":"1","name":"새박스"},{"id":"2","name":"스프링 실전"},
@@ -45,11 +44,11 @@ function PandoraMain(){
   //controller에서 받아온 box들을 boxObjectGroup로 변경함
   useEffect(()=>{
     let temp=[];
-    searchedboxObjectGroup.map((item,i)=>{
+    searchedBoxObjectGroup.map((item,i)=>{
       temp.push(new Pandora(item["id"],item["name"]));
     });
     setBoxObjectGroup(temp);
-  },[searchedboxObjectGroup]);
+  },[searchedBoxObjectGroup]);
   useEffect(()=>{
 
   },[boxObjectGroup])
@@ -57,18 +56,19 @@ function PandoraMain(){
     <div>
       <Switch>
         <Route exact path='/'>
-          <PandoraSearch keyword={keyword} setKeyword={setKeyword} setSearchedboxObjectGroup={setSearchedboxObjectGroup}  />
+          <PandoraSearch keyword={keyword} setKeyword={setKeyword} setsearchedBoxObjectGroup={setsearchedBoxObjectGroup}  />
         </Route>
         <Route exact path='/list'>
           {/* 상단 옵션 바 */}
           <div className="search-bar">
-            <NavbarSub keyword={keyword} setKeyword={setKeyword} setSearchedboxObjectGroup={setSearchedboxObjectGroup} />
+            <NavbarSub keyword={keyword} setKeyword={setKeyword} setsearchedBoxObjectGroup={setsearchedBoxObjectGroup} />
           </div>
-          <PandoraListView boxObjectGroup={boxObjectGroup} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox} />
+
+          <BoxListView boxObjectGroup={boxObjectGroup} setKeyModalToggle={setKeyModalToggle} setSelectedBox={setSelectedBox} />
+          
           {keyModalToggle != false ?
-            <HashCodeModal selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle}
-              searchedboxObjectGroup={searchedboxObjectGroup} setSearchedboxObjectGroup={setSearchedboxObjectGroup} keyword={keyword}
-              boxObjectGroup={boxObjectGroup} setBoxObjectGroup={setBoxObjectGroup} /> :
+            <BoxItemModal selectedBox={selectedBox} setSelectedBox={setSelectedBox} setKeyModalToggle={setKeyModalToggle} /> 
+            :
             null
           }
         </Route>
