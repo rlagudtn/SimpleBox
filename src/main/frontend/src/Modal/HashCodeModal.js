@@ -153,22 +153,7 @@ function StatusRender(props){
       document.body.appendChild(link);
       link.click();
       link.remove();
-          // const name=response.headers["content-disposition"].split("filename=")[1].replace(/"/g,"");
-          // // Blob 생성자 함수로 URL 생성하여 할당
-          // const url = window.URL.createObjectURL(response.data);
-          // // <a> 요소 동적 생성
-          // const link = document.createElement('a');
-          // // <a> 요소에 href attribute에 url 할당
-          // link.href = url;
-          // // <a> 요소에 download attribute 와 value 동적 할당
-          // link.setAttribute('download', name);
-          // // link html을 파일 이름으로 설정
-          // link.innerHTML = name;
-          // // file-list div 내에 링크 생성
-          // document.querySelector('.file-list').appendChild(link);
-          // // 줄바꿈을 위한 br태그 추가
-          // const br = document.createElement('br');
-          // document.querySelector('.file-list').appendChild(br);
+          
         })
         .catch(e => {
           alert("오류가 발생하였습니다.11");
@@ -199,7 +184,6 @@ function StatusRender(props){
           {
             props.files.map((item,index)=>{
               return <div onClick={()=>{downloadFile(item["fileId"])}}
-
               >{item["fileName"]}</div>
             })
           }
