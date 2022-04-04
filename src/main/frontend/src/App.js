@@ -11,7 +11,7 @@ import './App.css';
 import NavbarMain from './LayoutComponent/NavbarMain';
 import LeftSidebar from './LayoutComponent/LeftSidebar';
 
-import PandoraMain from './View/PandoraMain';
+import SimpleBoxHome from './View/SimpleBoxHome';
 
 function App() {
 
@@ -26,7 +26,7 @@ function App() {
           <LeftSidebar />
         </div>
         <div className="main">
-          <PandoraMain />
+          <SimpleBoxHome />
         </div>
       </div>
 

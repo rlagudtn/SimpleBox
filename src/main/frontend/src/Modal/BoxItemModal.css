@@ -56,7 +56,7 @@
     border-radius: 5px;
     font-size: 13px;
   }
-  .modal.openModal {
+  .modal.open-modal {
     display: flex;
     align-items: center;
     /* 팝업이 열릴때 스르륵 열리는 효과 */

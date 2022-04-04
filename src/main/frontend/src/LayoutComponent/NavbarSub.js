@@ -11,7 +11,7 @@ function NavbarSub(props){
         }} />
         <button className='search-btn btn' onClick={() => {
           searchBoxes(props.keyword, props.setSearchedBoxGroup)
-        }} ><i class="fas fa-search"></i></button>
+        }} ><i className="fas fa-search"></i></button>
       </div>
       <div className="new-box ">
         <Link to='/new'><button className='new-btn btn'>새 박스1</button></Link>

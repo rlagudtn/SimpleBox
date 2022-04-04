@@ -13,10 +13,5 @@ class Box{
   }
 }
 
-class Pandora extends Box {
-  constructor(id, name) {
-    super(id, name);
-  }
-}
 
-export {Box,Pandora};
+export default Box;

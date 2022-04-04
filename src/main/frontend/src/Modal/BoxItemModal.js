@@ -65,7 +65,7 @@ function BoxItemModal(props){
     
   }
   return (
-    <div className='openModal modal'>
+    <div className='open-modal modal'>
       <section>
           <header>
             {currentBox.title}
