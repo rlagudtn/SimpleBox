@@ -60,8 +60,3 @@ public String savePandora(@RequestParam("files") List<MultipartFile> files,
     return ret;
 }
 ```
-
----
-## 개선 사항
-* 코드 리팩토링 진행
-* 대용량 파일 업로드 기능 추가
